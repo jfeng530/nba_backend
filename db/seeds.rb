@@ -62,7 +62,7 @@ all_games_from_specific_player_in_specific_season_url = "#{url}/stats/?per_page=
 
 # ------------------------------------------------------------------------------------------------
 
-# map over the first 500 players and for each player map over all 41 seasons by year (1979-2019)
+# map over the first 500 players and for each player map over all 41 years (1979-2019)
 # a single fetch will return all the games of a season
 #    sort the array of GAME objects, from first game to last game
 #       if the data returned is empty, dont do anything and make the next fetch for the next year (of same player)
@@ -77,38 +77,40 @@ all_games_from_specific_player_in_specific_season_url = "#{url}/stats/?per_page=
 # I can (both DATE or ID)
 # -----------------------------------------------------------------------------------------------------------------------------------
 
-pts = 0
-ast = 0
-blk = 0
-dreb = 0
-oreb = 0
-reb = 0
-fg3m = 0
-fg3a = 0
-fgm = 0
-fga = 0
-ftm = 0
-fta = 0
-pf = 0
-stl = 0
-turnover = 0
-team_id = 0
+# pts = 0
+# ast = 0
+# blk = 0
+# dreb = 0
+# oreb = 0
+# reb = 0
+# fg3m = 0
+# fg3a = 0
+# fgm = 0
+# fga = 0
+# ftm = 0
+# fta = 0
+# pf = 0
+# stl = 0
+# turnover = 0
+# team_id = 0
 
-
-request = RestClient::Request.execute(
-    method: :get,
-    url: "https://www.balldontlie.io/api/v1/stats/?per_page=100&seasons[]=2018&player_ids[]=30&postseason=false" 
-)
-response = JSON.parse(request)
-games = response["data"]
-sorted_games = games.sort_by { |game| game["game"]["id"] }
-
-puts(sorted_games.count)
-
-if sorted_games.first["team"]["id"] != sorted_games.last["team"]["id"]
-    first_half = sorted_games.select { |game| game["team"]["id"] == sorted_games.first["team"]["id"] }
-    second_half = sorted_games.select { |game| game["team"]["id"] == sorted_games.last["team"]["id"] }
-    first_half.map do |game|
+def createStat(arr, player_id, team_id, year)
+    pts = 0
+    ast = 0
+    blk = 0
+    dreb = 0
+    oreb = 0
+    reb = 0
+    fg3m = 0
+    fg3a = 0
+    fgm = 0
+    fga = 0
+    ftm = 0
+    fta = 0
+    pf = 0
+    stl = 0
+    turnover = 0
+    arr.each do |game|
         ast += game["ast"] if game["ast"]
         blk += game["blk"] if game["blk"]
         dreb += game["dreb"] if game["dreb"]
@@ -123,9 +125,8 @@ if sorted_games.first["team"]["id"] != sorted_games.last["team"]["id"]
         reb += game["reb"] if game["reb"]
         stl += game["stl"] if game["stl"]
         turnover += game["turnover"] if game["turnover"]
-        team_id = game["team"]["id"]
     end
-    Stat.create(player: Player.find(30), season: Season.find_by({year: 2018, team:team_id}), ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
+    Stat.create(player: Player.find(player_id), season: Season.find_by({year: year, team: team_id}), ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
     pts = 0
     ast = 0
     blk = 0
@@ -142,60 +143,170 @@ if sorted_games.first["team"]["id"] != sorted_games.last["team"]["id"]
     stl = 0
     turnover = 0
     team_id = 0
-    second_half.map do |game|
-        ast += game["ast"] if game["ast"]
-        blk += game["blk"] if game["blk"]
-        dreb += game["dreb"] if game["dreb"]
-        fg3a += game["fg3a"] if game["fg3a"]
-        fg3m += game["fg3m"] if game["fg3m"]
-        fga += game["fga"] if game["fga"]
-        ftm += game["ftm"] if game["ftm"]
-        fta += game["fta"] if game["fta"]
-        oreb += game["oreb"] if game["oreb"]
-        pf += game["pf"] if game["pf"]
-        pts += game["pts"] if game["pts"]
-        reb += game["reb"] if game["reb"]
-        stl += game["stl"] if game["stl"]
-        turnover += game["turnover"] if game["turnover"]
-        team_id = game["team"]["id"]
-    end
-    Stat.create(player: Player.find(30), season: Season.find_by({year: 2018, team:team_id}), ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
-    pts = 0
-    ast = 0
-    blk = 0
-    dreb = 0
-    oreb = 0
-    reb = 0
-    fg3m = 0
-    fg3a = 0
-    fgm = 0
-    fga = 0
-    ftm = 0
-    fta = 0
-    pf = 0
-    stl = 0
-    turnover = 0
-    team_id = 0
-else
-    sorted_games.map do |game|
-        ast += game["ast"] if game["ast"]
-        blk += game["blk"] if game["blk"]
-        dreb += game["dreb"] if game["dreb"]
-        fg3a += game["fg3a"] if game["fg3a"]
-        fg3m += game["fg3m"] if game["fg3m"]
-        fga += game["fga"] if game["fga"]
-        ftm += game["ftm"] if game["ftm"]
-        fta += game["fta"] if game["fta"]
-        oreb += game["oreb"] if game["oreb"]
-        pf += game["pf"] if game["pf"]
-        pts += game["pts"] if game["pts"]
-        reb += game["reb"] if game["reb"]
-        stl += game["stl"] if game["stl"]
-        turnover += game["turnover"] if game["turnover"]
-        team_id = game["team"]["id"]
-    end
-    Stat.create(player: Player.find(30), season: Season.find_by({year: 2018, team:team_id}), ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
 end
+
+# Create All Stats
+# -----------------
+
+# first10 = Player.all.limit(10).sort
+playerArr = Player.all.sort
+
+# up to [90..]
+
+playerArr[90..].each do |player| # 3321
+    puts player.first_name + " " + player.last_name
+    Year.all.each do |year| # 41
+        sleep 1
+        request = RestClient::Request.execute(
+            method: :get,
+            url: "https://www.balldontlie.io/api/v1/stats/?per_page=88&seasons[]=#{year.id}&player_ids[]=#{player.id}&postseason=false"
+        )
+        response = JSON.parse(request)
+
+        games = response["data"]
+        if games != []
+            sorted_games = games.sort_by { |game| game["game"]["id"] }
+
+            # teams: an array of all teams that the player played for that season
+            arr = sorted_games.map do |game|
+                game["team"]["id"]
+            end
+            teams = arr.uniq
+
+            # for every team that the player played for, create a season stat associating player with said team specific year
+            teams.each do |team_id|
+                team_games = sorted_games.select { |game| game["team"]["id"] == team_id }
+                createStat(team_games, player.id, team_id, year.id)
+            end
+        end
+    end
+end
+
+# Can check for multiple teams in a season
+# ------------------------------------------
+
+# request = RestClient::Request.execute(
+#     method: :get,
+#     url: "https://www.balldontlie.io/api/v1/stats/?per_page=100&seasons[]=1996&player_ids[]=830&postseason=false" 
+# )
+# response = JSON.parse(request)
+# games = response["data"]
+# sorted_games = games.sort_by { |game| game["game"]["id"] }
+
+# puts(sorted_games.count)
+
+# # teams: an array of all teams that the player played for that season
+# arr = sorted_games.map do |game|
+#     game["team"]["id"]
+# end
+# teams = arr.uniq
+
+# # for every team that the player played for, create a season stat associating player with said team specific year
+# teams.each do |team_id|
+#     team_games = sorted_games.select { |game| game["team"]["id"] == team_id }
+#     createStat(team_games, 30, team_id, 2018)
+# end
+
+
+# Only works for 2 teams within a season
+# ----------------------------------------
+
+# if sorted_games.first["team"]["id"] != sorted_games.last["team"]["id"]
+#     first_half = sorted_games.select { |game| game["team"]["id"] == sorted_games.first["team"]["id"] }
+#     second_half = sorted_games.select { |game| game["team"]["id"] == sorted_games.last["team"]["id"] }
+#     first_half.map do |game|
+#         ast += game["ast"] if game["ast"]
+#         blk += game["blk"] if game["blk"]
+#         dreb += game["dreb"] if game["dreb"]
+#         fg3a += game["fg3a"] if game["fg3a"]
+#         fg3m += game["fg3m"] if game["fg3m"]
+#         fga += game["fga"] if game["fga"]
+#         ftm += game["ftm"] if game["ftm"]
+#         fta += game["fta"] if game["fta"]
+#         oreb += game["oreb"] if game["oreb"]
+#         pf += game["pf"] if game["pf"]
+#         pts += game["pts"] if game["pts"]
+#         reb += game["reb"] if game["reb"]
+#         stl += game["stl"] if game["stl"]
+#         turnover += game["turnover"] if game["turnover"]
+#         team_id = game["team"]["id"]
+#     end
+#     Stat.create(player: Player.find(30), season: Season.find_by({year: 2018, team:team_id}), ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
+#     pts = 0
+#     ast = 0
+#     blk = 0
+#     dreb = 0
+#     oreb = 0
+#     reb = 0
+#     fg3m = 0
+#     fg3a = 0
+#     fgm = 0
+#     fga = 0
+#     ftm = 0
+#     fta = 0
+#     pf = 0
+#     stl = 0
+#     turnover = 0
+#     team_id = 0
+#     second_half.map do |game|
+#         ast += game["ast"] if game["ast"]
+#         blk += game["blk"] if game["blk"]
+#         dreb += game["dreb"] if game["dreb"]
+#         fg3a += game["fg3a"] if game["fg3a"]
+#         fg3m += game["fg3m"] if game["fg3m"]
+#         fga += game["fga"] if game["fga"]
+#         ftm += game["ftm"] if game["ftm"]
+#         fta += game["fta"] if game["fta"]
+#         oreb += game["oreb"] if game["oreb"]
+#         pf += game["pf"] if game["pf"]
+#         pts += game["pts"] if game["pts"]
+#         reb += game["reb"] if game["reb"]
+#         stl += game["stl"] if game["stl"]
+#         turnover += game["turnover"] if game["turnover"]
+#         team_id = game["team"]["id"]
+#     end
+#     Stat.create(player: Player.find(30), season: Season.find_by({year: 2018, team:team_id}), ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
+#     pts = 0
+#     ast = 0
+#     blk = 0
+#     dreb = 0
+#     oreb = 0
+#     reb = 0
+#     fg3m = 0
+#     fg3a = 0
+#     fgm = 0
+#     fga = 0
+#     ftm = 0
+#     fta = 0
+#     pf = 0
+#     stl = 0
+#     turnover = 0
+#     team_id = 0
+# else
+#     sorted_games.map do |game|
+#         ast += game["ast"] if game["ast"]
+#         blk += game["blk"] if game["blk"]
+#         dreb += game["dreb"] if game["dreb"]
+#         fg3a += game["fg3a"] if game["fg3a"]
+#         fg3m += game["fg3m"] if game["fg3m"]
+#         fga += game["fga"] if game["fga"]
+#         ftm += game["ftm"] if game["ftm"]
+#         fta += game["fta"] if game["fta"]
+#         oreb += game["oreb"] if game["oreb"]
+#         pf += game["pf"] if game["pf"]
+#         pts += game["pts"] if game["pts"]
+#         reb += game["reb"] if game["reb"]
+#         stl += game["stl"] if game["stl"]
+#         turnover += game["turnover"] if game["turnover"]
+#         team_id = game["team"]["id"]
+#     end
+#     Stat.create(player: Player.find(30), season: Season.find_by({year: 2018, team:team_id}), ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
+# end
+
+
+
+# Checks to see if next game's team matches, doesn't include the last game before a trade
+# -----------------------------------------------------------------------------------------
 
 # sorted_games.each_cons(2) do |game, next_game|
 #     if game["team"]["id"] == next_game["team"]["id"]
