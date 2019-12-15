@@ -145,6 +145,29 @@ def createStat(arr, player_id, team_id, year)
     team_id = 0
 end
 
+Player.all.each do |player|
+    years = []
+    player.player_stats.each do |stat|
+        if !years.include?(stat.game.season)
+            years.push(stat.game.season)
+        end
+    end
+    puts years
+    years.each do |year|
+        specific_year = player.player_stats.select {|stat| stat.game.season == year}
+        teams = []
+        specific_year.each do |stat|
+            if !teams.include?(stat.team)
+                teams.push(stat.team)
+            end
+        end
+        puts teams
+        teams.each do |team|
+            team_games = specific_year.select { |game| game.team == team }
+            # createStat(team_games, player.id, team_id, year.id)
+        end
+    end
+end
 
 
 # Create All Stats
@@ -182,6 +205,7 @@ end
 #             arr = sorted_games.map do |game|
 #                 game["team"]["id"]
 #             end
+
 #             teams = arr.uniq
 
 #             # for every team that the player played for, create a season stat associating player with said team specific year
