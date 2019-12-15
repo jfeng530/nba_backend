@@ -10,75 +10,95 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_12_155709) do
+ActiveRecord::Schema.define(version: 2019_03_06_154702) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "players", force: :cascade do |t|
-    t.string "first_name"
-    t.string "last_name"
-    t.string "position"
+  create_table "games", id: :integer, default: nil, force: :cascade do |t|
+    t.datetime "date", null: false
+    t.integer "home_team_id", null: false
+    t.integer "visitor_team_id", null: false
+    t.integer "season", null: false
+    t.serial "public_id", null: false
+    t.string "status"
+    t.integer "period"
+    t.string "time"
+    t.boolean "postseason", default: false, null: false
+    t.index ["date", "home_team_id", "visitor_team_id"], name: "games_unique_constraint", unique: true
+    t.index ["public_id"], name: "idx_games_public_id"
+  end
+
+  create_table "knex_migrations", id: :serial, force: :cascade do |t|
+    t.string "name", limit: 255
+    t.integer "batch"
+    t.datetime "migration_time"
+  end
+
+  create_table "knex_migrations_lock", primary_key: "index", id: :serial, force: :cascade do |t|
+    t.integer "is_locked"
+  end
+
+  create_table "player_stats", id: :serial, force: :cascade do |t|
+    t.integer "game_id", null: false
+    t.integer "team_id", null: false
+    t.integer "player_id", null: false
+    t.text "min"
+    t.integer "fgm"
+    t.integer "fga"
+    t.integer "fg3m"
+    t.integer "fg3a"
+    t.integer "ftm"
+    t.integer "fta"
+    t.integer "oreb"
+    t.integer "dreb"
+    t.integer "reb"
+    t.integer "ast"
+    t.integer "stl"
+    t.integer "blk"
+    t.integer "turnover"
+    t.integer "pf"
+    t.integer "pts"
+    t.serial "public_id", null: false
+    t.float "fg_pct"
+    t.float "fg3_pct"
+    t.float "ft_pct"
+    t.index ["game_id", "player_id"], name: "player_stats_game_unique", unique: true
+    t.index ["public_id"], name: "idx_player_stats_public_id"
+  end
+
+  create_table "players", id: :integer, default: nil, force: :cascade do |t|
+    t.text "first_name", null: false
+    t.text "last_name", null: false
+    t.string "position", limit: 10, null: false
     t.integer "height_feet"
     t.integer "height_inches"
     t.integer "weight_pounds"
-    t.boolean "active"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.integer "team_id", null: false
+    t.datetime "updated_at", default: -> { "now()" }, null: false
+    t.datetime "created_at", default: -> { "now()" }, null: false
+    t.serial "public_id", null: false
+    t.index ["public_id"], name: "idx_players_id"
   end
 
-  create_table "seasons", force: :cascade do |t|
-    t.bigint "year_id", null: false
-    t.bigint "team_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["team_id"], name: "index_seasons_on_team_id"
-    t.index ["year_id"], name: "index_seasons_on_year_id"
+  create_table "teams", id: :integer, default: nil, force: :cascade do |t|
+    t.string "conference", limit: 4, null: false
+    t.string "division", limit: 20, null: false
+    t.text "city", null: false
+    t.string "abbreviation", limit: 3, null: false
+    t.text "name", null: false
+    t.text "full_name", null: false
+    t.serial "public_id", null: false
+    t.index ["public_id"], name: "idx_teams_public_id"
   end
 
-  create_table "stats", force: :cascade do |t|
-    t.bigint "player_id", null: false
-    t.bigint "season_id", null: false
-    t.integer "ast"
-    t.integer "blk"
-    t.integer "dreb"
-    t.integer "fg3a"
-    t.integer "fg3m"
-    t.integer "fga"
-    t.integer "fgm"
-    t.integer "fta"
-    t.integer "ftm"
-    t.integer "oreb"
-    t.integer "pf"
-    t.integer "pts"
-    t.integer "reb"
-    t.integer "stl"
-    t.integer "turnover"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.index ["player_id"], name: "index_stats_on_player_id"
-    t.index ["season_id"], name: "index_stats_on_season_id"
+  create_table "updates", id: false, force: :cascade do |t|
+    t.datetime "date", null: false
   end
 
-  create_table "teams", force: :cascade do |t|
-    t.string "abbreviation"
-    t.string "city"
-    t.string "conference"
-    t.string "division"
-    t.string "full_name"
-    t.string "name"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "years", force: :cascade do |t|
-    t.integer "year"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  add_foreign_key "seasons", "teams"
-  add_foreign_key "seasons", "years"
-  add_foreign_key "stats", "players"
-  add_foreign_key "stats", "seasons"
+  add_foreign_key "games", "teams", column: "home_team_id", name: "games_home_team_id_fkey"
+  add_foreign_key "games", "teams", column: "visitor_team_id", name: "games_visitor_team_id_fkey"
+  add_foreign_key "player_stats", "games", name: "player_stats_game_id_fkey"
+  add_foreign_key "player_stats", "teams", name: "player_stats_team_id_fkey"
+  add_foreign_key "players", "teams", name: "players_team_id_fkey"
 end

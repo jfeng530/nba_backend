@@ -145,42 +145,53 @@ def createStat(arr, player_id, team_id, year)
     team_id = 0
 end
 
+
+
 # Create All Stats
 # -----------------
 
 # first10 = Player.all.limit(10).sort
-playerArr = Player.all.sort
 
-# up to [90..]
+# 841 at player[129]
+# 1025 at player[159]
+# 1345 at player[198]
+# 1511 at player[220]
+# 1728 at player[250]
 
-playerArr[90..].each do |player| # 3321
-    puts player.first_name + " " + player.last_name
-    Year.all.each do |year| # 41
-        sleep 1
-        request = RestClient::Request.execute(
-            method: :get,
-            url: "https://www.balldontlie.io/api/v1/stats/?per_page=88&seasons[]=#{year.id}&player_ids[]=#{player.id}&postseason=false"
-        )
-        response = JSON.parse(request)
+# next one is [281..]
 
-        games = response["data"]
-        if games != []
-            sorted_games = games.sort_by { |game| game["game"]["id"] }
+# Missed
+# ----------
+# shaq harrison playerArr[198]
 
-            # teams: an array of all teams that the player played for that season
-            arr = sorted_games.map do |game|
-                game["team"]["id"]
-            end
-            teams = arr.uniq
+# playerArr = Player.all.sort
+# playerArr[291..].each do |player| # 3257 total players
+#     puts player.first_name + " " + player.last_name
+#     Year.all.each do |year| # 41
+#         sleep 1
+#         request = RestClient::Request.execute(
+#             method: :get,
+#             url: "https://www.balldontlie.io/api/v1/stats/?per_page=88&seasons[]=#{year.id}&player_ids[]=#{player.id}&postseason=false"
+#         )
+#         response = JSON.parse(request)
+#         games = response["data"]
+#         if games != []
+#             sorted_games = games.sort_by { |game| game["game"]["id"] }
 
-            # for every team that the player played for, create a season stat associating player with said team specific year
-            teams.each do |team_id|
-                team_games = sorted_games.select { |game| game["team"]["id"] == team_id }
-                createStat(team_games, player.id, team_id, year.id)
-            end
-        end
-    end
-end
+#             # teams: an array of all teams that the player played for that season
+#             arr = sorted_games.map do |game|
+#                 game["team"]["id"]
+#             end
+#             teams = arr.uniq
+
+#             # for every team that the player played for, create a season stat associating player with said team specific year
+#             teams.each do |team_id|
+#                 team_games = sorted_games.select { |game| game["team"]["id"] == team_id }
+#                 createStat(team_games, player.id, team_id, year.id)
+#             end
+#         end
+#     end
+# end
 
 # Can check for multiple teams in a season
 # ------------------------------------------
