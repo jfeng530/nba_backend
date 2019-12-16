@@ -55,19 +55,14 @@ all_games_from_specific_player_in_specific_season_url = "#{url}/stats/?per_page=
 # ------------------------
 
 # Team.all.each do |team|
-#     Year.all.each do |year|
+#     years = (1979..2019).to_a
+#     years.each do |year|
 #         Season.create(team: team, year: year)
 #     end
 # end
 
 # ------------------------------------------------------------------------------------------------
 
-Team.all.each do |team|
-    years = team.player_stats.map{|stat| stat.game.year}.uniq
-    years.all.each do |year|
-        Season.create(team: team, year: year)
-    end
-end
 
 # map over the first 500 players and for each player map over all 41 years (1979-2019)
 # a single fetch will return all the games of a season
@@ -101,7 +96,7 @@ end
 # turnover = 0
 # team_id = 0
 
-def createStat(arr, player_id, team_id, year)
+def createStat(arr, player, season)
     pts = 0
     ast = 0
     blk = 0
@@ -124,6 +119,7 @@ def createStat(arr, player_id, team_id, year)
         fg3a += game["fg3a"] if game["fg3a"]
         fg3m += game["fg3m"] if game["fg3m"]
         fga += game["fga"] if game["fga"]
+        fgm += game["fgm"] if game["fgm"]
         ftm += game["ftm"] if game["ftm"]
         fta += game["fta"] if game["fta"]
         oreb += game["oreb"] if game["oreb"]
@@ -133,49 +129,33 @@ def createStat(arr, player_id, team_id, year)
         stl += game["stl"] if game["stl"]
         turnover += game["turnover"] if game["turnover"]
     end
-    Stat.create(player: Player.find(player_id), season: Season.find_by({year: year, team: team_id}), ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
-    pts = 0
-    ast = 0
-    blk = 0
-    dreb = 0
-    oreb = 0
-    reb = 0
-    fg3m = 0
-    fg3a = 0
-    fgm = 0
-    fga = 0
-    ftm = 0
-    fta = 0
-    pf = 0
-    stl = 0
-    turnover = 0
-    team_id = 0
+    Stat.create(player: player, season: season, ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
 end
 
-# Player.all.each do |player|
-#     years = []
-#     player.player_stats.each do |stat|
-#         if !years.include?(stat.game.season)
-#             years.push(stat.game.season)
-#         end
-#     end
-#     puts years
-#     years.each do |year|
-#         specific_year = player.player_stats.select {|stat| stat.game.season == year}
-#         teams = []
-#         specific_year.each do |stat|
-#             if !teams.include?(stat.team)
-#                 teams.push(stat.team)
-#             end
-#         end
-#         puts teams
-#         teams.each do |team|
-#             team_games = specific_year.select { |game| game.team == team }
-#             # createStat(team_games, player.id, team_id, year.id)
-#         end
-#     end
-# end
+Player.all.each do |player|
+    puts(player.first_name + " " + player.last_name)
+    years = player.player_stats.map{|stat| stat.game.year}.uniq
+    years.each do |year|
+        puts(year)
+        specific_year_stats = player.player_stats.select {|stat| stat.game.year == year && stat.game.postseason == false}
+        teams = specific_year_stats.map{|stat| stat.team}.uniq 
+        teams.each do |team|
+            team_games = specific_year_stats.select { |stat| stat.team == team }
+            season = Season.find_by({team: team, year: year})
+            createStat(team_games, player, season)
+        end
+    end
+end
 
+# barnes = Player.find(208)
+# barnes_season = barnes.player_stats.select {|stat| stat.game.year == 1996 && stat.game.postseason == false}
+# teams = barnes_season.map{|stat| stat.team}.uniq
+# teams.each do |team|
+#     # byebug
+#     team_games = barnes_season.select {|stat| stat.team == team && stat.game.postseason == false}
+#     season = Season.find_by({team: team, year: 1996})
+#     createStat(team_games, barnes, season)
+# end
 
 # Create All Stats
 # -----------------

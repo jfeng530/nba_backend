@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_16_165138) do
+ActiveRecord::Schema.define(version: 2019_12_16_171415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,30 @@ ActiveRecord::Schema.define(version: 2019_12_16_165138) do
     t.index ["team_id"], name: "index_seasons_on_team_id"
   end
 
+  create_table "stats", force: :cascade do |t|
+    t.bigint "season_id", null: false
+    t.bigint "player_id", null: false
+    t.integer "fgm"
+    t.integer "fga"
+    t.integer "fg3m"
+    t.integer "fg3a"
+    t.integer "ftm"
+    t.integer "fta"
+    t.integer "oreb"
+    t.integer "dreb"
+    t.integer "reb"
+    t.integer "ast"
+    t.integer "stl"
+    t.integer "blk"
+    t.integer "turnover"
+    t.integer "pf"
+    t.integer "pts"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["player_id"], name: "index_stats_on_player_id"
+    t.index ["season_id"], name: "index_stats_on_season_id"
+  end
+
   create_table "teams", id: :integer, default: nil, force: :cascade do |t|
     t.string "conference", limit: 4, null: false
     t.string "division", limit: 20, null: false
@@ -110,4 +134,6 @@ ActiveRecord::Schema.define(version: 2019_12_16_165138) do
   add_foreign_key "player_stats", "teams", name: "player_stats_team_id_fkey"
   add_foreign_key "players", "teams", name: "players_team_id_fkey"
   add_foreign_key "seasons", "teams"
+  add_foreign_key "stats", "players"
+  add_foreign_key "stats", "seasons"
 end
