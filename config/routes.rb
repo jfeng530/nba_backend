@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :seasons
   resources :players, only: [:index, :show]
   resources :teams, only: [:index, :show]
   resources :player_stats, only: [:index, :show]

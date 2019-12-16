@@ -62,6 +62,13 @@ all_games_from_specific_player_in_specific_season_url = "#{url}/stats/?per_page=
 
 # ------------------------------------------------------------------------------------------------
 
+Team.all.each do |team|
+    years = team.player_stats.map{|stat| stat.game.year}.uniq
+    years.all.each do |year|
+        Season.create(team: team, year: year)
+    end
+end
+
 # map over the first 500 players and for each player map over all 41 years (1979-2019)
 # a single fetch will return all the games of a season
 #    sort the array of GAME objects, from first game to last game
@@ -145,29 +152,29 @@ def createStat(arr, player_id, team_id, year)
     team_id = 0
 end
 
-Player.all.each do |player|
-    years = []
-    player.player_stats.each do |stat|
-        if !years.include?(stat.game.season)
-            years.push(stat.game.season)
-        end
-    end
-    puts years
-    years.each do |year|
-        specific_year = player.player_stats.select {|stat| stat.game.season == year}
-        teams = []
-        specific_year.each do |stat|
-            if !teams.include?(stat.team)
-                teams.push(stat.team)
-            end
-        end
-        puts teams
-        teams.each do |team|
-            team_games = specific_year.select { |game| game.team == team }
-            # createStat(team_games, player.id, team_id, year.id)
-        end
-    end
-end
+# Player.all.each do |player|
+#     years = []
+#     player.player_stats.each do |stat|
+#         if !years.include?(stat.game.season)
+#             years.push(stat.game.season)
+#         end
+#     end
+#     puts years
+#     years.each do |year|
+#         specific_year = player.player_stats.select {|stat| stat.game.season == year}
+#         teams = []
+#         specific_year.each do |stat|
+#             if !teams.include?(stat.team)
+#                 teams.push(stat.team)
+#             end
+#         end
+#         puts teams
+#         teams.each do |team|
+#             team_games = specific_year.select { |game| game.team == team }
+#             # createStat(team_games, player.id, team_id, year.id)
+#         end
+#     end
+# end
 
 
 # Create All Stats
