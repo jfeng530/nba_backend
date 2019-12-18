@@ -2,7 +2,7 @@ class Team < ApplicationRecord
 
     has_many :player_stats
     has_many :seasons
-    has_many :games
+    has_many :games 
     has_many :stats, through: :seasons
 
     has_many :games_as_home, class_name: "Game", foreign_key: "home_team_id"
