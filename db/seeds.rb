@@ -132,20 +132,20 @@ def createStat(arr, player, season)
     Stat.create(player: player, season: season, ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
 end
 
-Player.all.each do |player|
-    puts(player.first_name + " " + player.last_name)
-    years = player.player_stats.map{|stat| stat.game.year}.uniq
-    years.each do |year|
-        puts(year)
-        specific_year_stats = player.player_stats.select {|stat| stat.game.year == year && stat.game.postseason == false}
-        teams = specific_year_stats.map{|stat| stat.team}.uniq 
-        teams.each do |team|
-            team_games = specific_year_stats.select { |stat| stat.team == team }
-            season = Season.find_by({team: team, year: year})
-            createStat(team_games, player, season)
-        end
-    end
-end
+# Player.all.each do |player|
+#     puts(player.first_name + " " + player.last_name)
+#     years = player.player_stats.map{|stat| stat.game.year}.uniq
+#     years.each do |year|
+#         puts(year)
+#         specific_year_stats = player.player_stats.select {|stat| stat.game.year == year && stat.game.postseason == false}
+#         teams = specific_year_stats.map{|stat| stat.team}.uniq 
+#         teams.each do |team|
+#             team_games = specific_year_stats.select { |stat| stat.team == team }
+#             season = Season.find_by({team: team, year: year})
+#             createStat(team_games, player, season)
+#         end
+#     end
+# end
 
 # Harrison Barnes Test
 # ------------------------

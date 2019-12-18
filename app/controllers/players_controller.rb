@@ -10,11 +10,9 @@ class PlayersController < ApplicationController
         render json: player
     end
 
-    def player_season
+    def season_stats
         player = Player.find(params[:id])
-        # byebug
-        game_stats = player.player_stats.select{|stat| stat.game.season == params[:season].to_i}
-        render json: game_stats
+        render json: player.show_stats
     end
     
 end
