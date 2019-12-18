@@ -147,6 +147,8 @@ Player.all.each do |player|
     end
 end
 
+# Harrison Barnes Test
+# ------------------------
 # barnes = Player.find(208)
 # barnes_season = barnes.player_stats.select {|stat| stat.game.year == 1996 && stat.game.postseason == false}
 # teams = barnes_season.map{|stat| stat.team}.uniq
