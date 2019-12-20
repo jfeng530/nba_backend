@@ -9,5 +9,5 @@ class StatsController < ApplicationController
         stat = Stat.find(params[:id])
         render json: stat
     end
-    
+
 end

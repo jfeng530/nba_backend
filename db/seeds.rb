@@ -1,16 +1,8 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
-
 require 'rest-client'
 
-url = "https://www.balldontlie.io/api/v1"
-team_games_from_specific_season_url = "#{url}/games/?seasons[]=2018&team_ids[]=14"
-all_games_from_specific_player_in_specific_season_url = "#{url}/stats/?per_page=100&seasons[]=2018&player_ids[]=237&postseason=false"
+# url = "https://www.balldontlie.io/api/v1"
+# team_games_from_specific_season_url = "#{url}/games/?seasons[]=2018&team_ids[]=14"
+# all_games_from_specific_player_in_specific_season_url = "#{url}/stats/?per_page=100&seasons[]=2018&player_ids[]=237&postseason=false"
 
 # Creates all Teams
 # -------------------
@@ -96,41 +88,41 @@ all_games_from_specific_player_in_specific_season_url = "#{url}/stats/?per_page=
 # turnover = 0
 # team_id = 0
 
-def createStat(arr, player, season)
-    pts = 0
-    ast = 0
-    blk = 0
-    dreb = 0
-    oreb = 0
-    reb = 0
-    fg3m = 0
-    fg3a = 0
-    fgm = 0
-    fga = 0
-    ftm = 0
-    fta = 0
-    pf = 0
-    stl = 0
-    turnover = 0
-    arr.each do |game|
-        ast += game["ast"] if game["ast"]
-        blk += game["blk"] if game["blk"]
-        dreb += game["dreb"] if game["dreb"]
-        fg3a += game["fg3a"] if game["fg3a"]
-        fg3m += game["fg3m"] if game["fg3m"]
-        fga += game["fga"] if game["fga"]
-        fgm += game["fgm"] if game["fgm"]
-        ftm += game["ftm"] if game["ftm"]
-        fta += game["fta"] if game["fta"]
-        oreb += game["oreb"] if game["oreb"]
-        pf += game["pf"] if game["pf"]
-        pts += game["pts"] if game["pts"]
-        reb += game["reb"] if game["reb"]
-        stl += game["stl"] if game["stl"]
-        turnover += game["turnover"] if game["turnover"]
-    end
-    Stat.create(player: player, season: season, ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
-end
+# def createStat(arr, player, season)
+#     pts = 0
+#     ast = 0
+#     blk = 0
+#     dreb = 0
+#     oreb = 0
+#     reb = 0
+#     fg3m = 0
+#     fg3a = 0
+#     fgm = 0
+#     fga = 0
+#     ftm = 0
+#     fta = 0
+#     pf = 0
+#     stl = 0
+#     turnover = 0
+#     arr.each do |game|
+#         ast += game["ast"] if game["ast"]
+#         blk += game["blk"] if game["blk"]
+#         dreb += game["dreb"] if game["dreb"]
+#         fg3a += game["fg3a"] if game["fg3a"]
+#         fg3m += game["fg3m"] if game["fg3m"]
+#         fga += game["fga"] if game["fga"]
+#         fgm += game["fgm"] if game["fgm"]
+#         ftm += game["ftm"] if game["ftm"]
+#         fta += game["fta"] if game["fta"]
+#         oreb += game["oreb"] if game["oreb"]
+#         pf += game["pf"] if game["pf"]
+#         pts += game["pts"] if game["pts"]
+#         reb += game["reb"] if game["reb"]
+#         stl += game["stl"] if game["stl"]
+#         turnover += game["turnover"] if game["turnover"]
+#     end
+#     Stat.create(player: player, season: season, ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
+# end
 
 # Player.all.each do |player|
 #     puts(player.first_name + " " + player.last_name)
@@ -147,6 +139,21 @@ end
 #     end
 # end
 
+# NEED TO SAVE GAMES PLAYED FOR SEASON
+# --------------------------------------
+# --------------------------------------
+# --------------------------------------
+# arr = Player.all.sort_by{|player| player.last_name}
+
+# arr.each do |player|
+#     puts(player.first_name + " " + player.last_name)
+#     years = player.stats.map{ |stat| stat.season.year }.uniq
+#     years.each do |year|
+#         puts(year)
+#         season_stats = player.player_stats.select{}
+#     end
+# end
+
 # Harrison Barnes Test
 # ------------------------
 # barnes = Player.find(208)
@@ -157,6 +164,14 @@ end
 #     team_games = barnes_season.select {|stat| stat.team == team && stat.game.postseason == false}
 #     season = Season.find_by({team: team, year: 1996})
 #     createStat(team_games, barnes, season)
+# end
+
+# Adding Full Names to all Players
+# ----------------------------------
+
+# Player.all.each do |player|
+#     puts(player.first_name + " " + player.last_name)
+#     player.full_name = "#{player.first_name} #{player.last_name}"
 # end
 
 # Create All Stats
@@ -371,17 +386,6 @@ end
 #     end
 # end
 # Stat.create(player: Player.find(30), season: Season.find_by({year: 2018, team:team_id}), ast: ast, blk: blk, dreb: dreb, fg3a: fg3a, fg3m: fg3m, fga: fga, fgm: fgm, fta: fta, ftm: ftm, oreb: oreb, pf: pf, pts: pts, reb: reb, stl: stl, turnover: turnover)
-
-
-
-
-
-
-
-
-
-
-
 
 # LeBron 2018 Season Test Case
 # ---------------------------------

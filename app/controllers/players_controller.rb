@@ -1,8 +1,16 @@
 class PlayersController < ApplicationController
 
     def index
-        players = Player.all
-        render json: players
+        if params[:search]
+            names = params[:search].split(' ')
+            names[1] = "" if names.length === 1 
+            players = Player.where("(lower(first_name) LIKE ? OR lower(last_name) LIKE ?) OR (lower(first_name) LIKE ? OR lower(last_name) LIKE ?)", 
+                                    names[0], names[1], names[1], names[0])
+            render json: players
+        else
+            players = Player.all
+            render json: players
+        end
     end
 
     def show

@@ -33,4 +33,5 @@ class Player < ApplicationRecord
             }
         end
     end
+
 end
