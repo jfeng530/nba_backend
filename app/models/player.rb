@@ -3,6 +3,7 @@ class Player < ApplicationRecord
     has_many :stats
     has_many :seasons, through: :stats
     has_many :player_stats, class_name: "PlayerStat"
+    has_many :games, through: :player_stats
     belongs_to :team, class_name: "Team", foreign_key: "team_id"
 
     def show_stats

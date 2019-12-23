@@ -139,6 +139,21 @@ require 'rest-client'
 #     end
 # end
 
+
+lebron = Player.find_by({first_name: "LeBron"})
+# games = lebron.games.where(year: 2016, postseason: false).count
+
+lebron.stats.each do |stat|
+  puts(stat.season.year)
+  games = lebron.player_stats.select{|s| s.game.year == stat.season.year && s.game.postseason == false}
+  teams = games.map{|s| s.team}.uniq
+  teams.each do |team|
+    team_games = games.select{|s| s.team == team}
+    stat.gp = team_games.count
+  end
+end
+
+
 # NEED TO SAVE GAMES PLAYED FOR SEASON
 # --------------------------------------
 # --------------------------------------
