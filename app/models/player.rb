@@ -30,7 +30,8 @@ class Player < ApplicationRecord
                 "blk": stat.blk,
                 "turnover": stat.turnover,
                 "pf": stat.pf,
-                "pts": stat.pts
+                "pts": stat.pts,
+                "gp": stat.gp
             }
         end
     end

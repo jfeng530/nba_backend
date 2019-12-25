@@ -139,19 +139,32 @@ require 'rest-client'
 #     end
 # end
 
+# ADD GAMES PLAYED TO 'STAT'
+# ---------------------------
+# ---------------------------
 
-lebron = Player.find_by({first_name: "LeBron"})
+# lebron = Player.find_by({first_name: "LeBron"})
+# arr = [lebron]
 # games = lebron.games.where(year: 2016, postseason: false).count
 
-lebron.stats.each do |stat|
-  puts(stat.season.year)
-  games = lebron.player_stats.select{|s| s.game.year == stat.season.year && s.game.postseason == false}
-  teams = games.map{|s| s.team}.uniq
-  teams.each do |team|
-    team_games = games.select{|s| s.team == team}
-    stat.gp = team_games.count
-  end
-end
+# arr = Player.all.sort_by{|p| p.last_name}
+# count = 0
+
+# arr.each do |player|
+#   count += 1
+#   puts(player.first_name + " " + player.last_name)
+#   puts("Count: #{count}")
+#   player.stats.each do |stat|
+#     puts(stat.season.year)
+#     games = player.player_stats.select{|s| s.game.year == stat.season.year && s.game.postseason == false}
+#     teams = games.map{|s| s.team}.uniq
+#     teams.each do |team|
+#       num = games.select{|s| s.team == team}.count
+#       puts(num)
+#       stat.update(gp: num)
+#     end
+#   end
+# end
 
 
 # NEED TO SAVE GAMES PLAYED FOR SEASON
