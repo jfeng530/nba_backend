@@ -5,6 +5,15 @@ class Stat < ApplicationRecord
   belongs_to :season
   belongs_to :player
 
+  def sim_stat(total, gp, arr)
+    stat_nd = Rubystats::NormalDistribution.new(total/gp, arr.stdevp)
+    stat_sim = stat_nd.rng.round
+    if stat_sim < 0
+      stat_sim = 0
+    end
+    return stat_sim
+  end
+
   def sd
     fgm = []
     fga = []
@@ -14,7 +23,6 @@ class Stat < ApplicationRecord
     fta = []
     oreb = []
     dreb = []
-    reb = []
     ast = []
     stl = []
     blk = []
@@ -45,9 +53,6 @@ class Stat < ApplicationRecord
       if s.dreb 
         dreb << s.dreb
       end
-      if s.reb
-        reb << s.reb
-      end
       if s.ast
         ast << s.ast
       end
@@ -61,32 +66,17 @@ class Stat < ApplicationRecord
         turnover << s.turnover
       end
     end
-    fgm_nd = Rubystats::NormalDistribution.new(self.fgm/self.gp, fgm.stdevp)
-    puts fgm_nd.rng
-    # fga_nd = Rubystats::NormalDistribution.new(self.fga/self.gp, fga.stdevp)
-    # puts fga_nd.rng
-    fg3m_nd = Rubystats::NormalDistribution.new(self.fg3m/self.gp, fg3m.stdevp)
-    puts fg3m_nd.rng
-    # fg3a_nd = Rubystats::NormalDistribution.new(self.fg3a/self.gp, fg3a.stdevp)
-    # puts fg3a_nd.rng
-    ftm_nd = Rubystats::NormalDistribution.new(self.ftm/self.gp, ftm.stdevp)
-    puts ftm_nd.rng
-    # pts_sd = pts.stdevp
-    # reb_sd = reb.stdevp
-    # fgm_sd = fgm.stdevp
-    # fga_sd = fga.stdevp
-    # fg3m_sd = fg3m.stdevp
-    # fg3a_sd = fg3a.stdevp
-    # ftm_sd = ftm.stdevp
-    # fta_sd = fta.stdevp
-    # oreb_sd = oreb.stdevp
-    # dreb_sd = dreb.stdevp
-    # reb_sd = reb.stdevp
-    # ast_sd = ast.stdevp
-    # stl_sd = stl.stdevp
-    # blk_sd = blk.stdevp
-    # turnover_sd = turnover.stdevp
-    # pf_sd = pf.stdevp
+   
+    fgm_sim = sim_stat(self.fgm, self.gp, fgm)
+    fg3m_sim = sim_stat(self.fg3m, self.gp, fg3m)
+    ftm_sim = sim_stat(self.ftm, self.gp, ftm)
+    oreb_sim = sim_stat(self.oreb, self.gp, oreb)
+    dreb_sim = sim_stat(self.dreb, self.gp, dreb)
+    ast_sim = sim_stat(self.ast, self.gp, ast)
+    stl_sim = sim_stat(self.stl, self.gp, stl)
+    blk_sim = sim_stat(self.blk, self.gp, blk)
+    to_sim = sim_stat(self.turnover, self.gp, turnover)
+    
   end
   
 end

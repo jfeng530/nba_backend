@@ -1,7 +1,5 @@
 require 'rest-client'
 
-Stat.first.sd
-
 # url = "https://www.balldontlie.io/api/v1"
 # team_games_from_specific_season_url = "#{url}/games/?seasons[]=2018&team_ids[]=14"
 # all_games_from_specific_player_in_specific_season_url = "#{url}/stats/?per_page=100&seasons[]=2018&player_ids[]=237&postseason=false"
