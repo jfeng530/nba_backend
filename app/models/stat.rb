@@ -37,7 +37,12 @@ class Stat < ApplicationRecord
       #   fgm << s.fgm
       # end
       if s.fga
-        fg2a << s.fga - s.fg3a
+        # byebug
+        if s.fg3a
+          fg2a << s.fga - s.fg3a
+        else
+          fg2a << s.fga
+        end
       end
       # if s.fg3m
       #   fg3m << s.fg3m
