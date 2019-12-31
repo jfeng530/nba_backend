@@ -9,5 +9,6 @@ Rails.application.routes.draw do
 
   get '/teams/:id/:season', to: "teams#season_roster"
   get '/players/:id/stats', to: "players#season_stats"
-
+  get '/seasons/:firstid/:secondid', to: "seasons#simulate_game"
+  
 end
