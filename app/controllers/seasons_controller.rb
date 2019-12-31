@@ -15,7 +15,6 @@ class SeasonsController < ApplicationController
         team2 = Season.find(params[:secondid])
         team1sim = team1.sim_stats
         team2sim = team2.sim_stats
-        # byebug
         render json: {
             team1: {
                 "team": team1.team,
