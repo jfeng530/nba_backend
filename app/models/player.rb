@@ -36,4 +36,11 @@ class Player < ApplicationRecord
         end
     end
 
+    def teams_played
+        teams = self.seasons.map do |season|
+            season.team
+        end
+        return teams.uniq
+    end
+
 end
