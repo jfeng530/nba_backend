@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_23_223246) do
+ActiveRecord::Schema.define(version: 2019_12_31_190501) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -122,6 +122,7 @@ ActiveRecord::Schema.define(version: 2019_12_23_223246) do
     t.text "name", null: false
     t.text "full_name", null: false
     t.serial "public_id", null: false
+    t.string "logo"
     t.index ["public_id"], name: "idx_teams_public_id"
   end
 
