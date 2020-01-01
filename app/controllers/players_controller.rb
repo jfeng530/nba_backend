@@ -25,7 +25,6 @@ class PlayersController < ApplicationController
 
     def teams
         player = Player.find(params[:id])
-        byebug
         render json: player.teams_played
     end
     

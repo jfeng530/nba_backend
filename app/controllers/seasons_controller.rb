@@ -18,11 +18,13 @@ class SeasonsController < ApplicationController
         render json: {
             team1: {
                 "team": team1.team,
-                "stats": team1sim
+                "stats": team1sim,
+                "year": team1.year
             }, 
             team2: {
                 "team": team2.team,
-                "stats": team2sim
+                "stats": team2sim,
+                "year": team2.year
             }
         }
     end
