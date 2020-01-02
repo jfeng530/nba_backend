@@ -8,7 +8,7 @@ class PlayersController < ApplicationController
                                     names[0], names[1], names[1], names[0])
             render json: players
         else
-            players = Player.all
+            players = Player.all[0..10]
             render json: players
         end
     end
