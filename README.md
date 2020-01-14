@@ -1,7 +1,7 @@
 <p align="center"><img width=50% src="https://i.imgur.com/6Ky5MZE.png"></p>
 <p>
-  <img align="center" src="https://img.shields.io/badge/Postgresql-12.1-336791">
-  <img align="center" src="https://img.shields.io/badge/React.JS-16.12.0-61DAFB">
+  <img align="center" src="https://img.shields.io/badge/PostgreSQL-12.1-336791">
+  <img align="center" src="https://img.shields.io/badge/React-16.12.0-61DAFB">
   <img align="center" src="https://img.shields.io/badge/React Redux-7.1.3-764ABC">
   <img align="center" src="https://img.shields.io/badge/Ruby-2.6.1-CC342D">
   <img align="center" src="https://img.shields.io/badge/Ruby%20On%20Rails-6.0.1-cc0600">
