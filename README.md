@@ -19,21 +19,21 @@
 
 # Overview
   ### Description
-  NBA Showdown is an NBA statistics and simulation web application. Utilizing Ruby on Rails, React and React Redux, NBA Showdown dynamically renders and displays statistics of any player and any team from 1979 to 2019 as well as simulate a game between any two teams.
+  NBA Showdown is a NBA statistics and simulation web application. Utilizing Ruby on Rails, React and React Redux, NBA Showdown dynamically renders and displays data of any player and any team from 1979 to 2019 as well as simulate a game between any two teams.
   
   ### Features
   - Features all teams and players in the NBA from 1979 to 2019
   - Search for and view season totals and averages of any NBA player
   - View season totals and averages of any NBA team
-  - Compare statistics of any two NBA players and any two NBA teams (with season totals and season averages)
+  - Compare statistics of any two NBA players and any two NBA teams
   - Simulate a game between two NBA teams from any season & view the box score of the simulated game
   
   ### Challenges
-  - The data in the reference API used to create the back-end did not include season totals for players.
-    - Required mapping over all players and comuting their season totals and thus their averages as well.
-    - Had to account for a player that was traded mid-season (each team played for that year would represent a new instance of season)
-    - Function written to compute season totals was an O(n²) algorithm
-  - Simulation algorithm needed to return accurate and realistic statistics that reflect a player's performance from that year
+  - The data in the reference API, [balldontlie API](https://www.balldontlie.io/), used to create the back-end did not include season totals for players
+    - Required mapping over all players and computing their season totals and averages
+    - Had to account for a player that was traded mid-season (each team played for that year would represent a new instance of a season)
+    - Function written to compute season totals was an O(n²) algorithm. As a result, running the function took about 36 hours in total. 
+  - Simulation algorithm needed to return accurate and realistic statistics that reflect a player's performance from that season
     - Decided on 'Normal Probability Model' as foundation for algorithm
     - Used gems [Rubystats](https://github.com/phillbaker/rubystats) and [Ruby Native Statistics](https://github.com/corybuecker/ruby-native-statistics) to randomly generate a statistic based on normal distribution (relative to player's season performance)
     
