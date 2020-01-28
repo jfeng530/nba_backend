@@ -19,7 +19,7 @@
 
 # Overview
   ### Description
-  NBA Showdown is a NBA statistics and simulation web application. Utilizing Ruby on Rails, React and React Redux, NBA Showdown dynamically renders and displays data of any player and any team from 1979 to 2019 as well as simulate a game between any two teams.
+  NBA Showdown is a NBA statistics and simulation web application. Utilizing Ruby on Rails, React, and React Redux, NBA Showdown dynamically renders and displays data of any player and any team from 1979 to 2019 as well as simulates a game between any two teams.
   
   ### Features
   - Features all teams and players in the NBA from 1979 to 2019
