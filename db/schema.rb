@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_31_190501) do
+ActiveRecord::Schema.define(version: 2020_12_23_223247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -110,6 +110,15 @@ ActiveRecord::Schema.define(version: 2019_12_31_190501) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.integer "gp"
+    t.integer "fg2a_arr", default: [], array: true
+    t.integer "fg3a_arr", default: [], array: true
+    t.integer "fta_arr", default: [], array: true
+    t.integer "oreb_arr", default: [], array: true
+    t.integer "dreb_arr", default: [], array: true
+    t.integer "ast_arr", default: [], array: true
+    t.integer "stl_arr", default: [], array: true
+    t.integer "blk_arr", default: [], array: true
+    t.integer "turnover_arr", default: [], array: true
     t.index ["player_id"], name: "index_stats_on_player_id"
     t.index ["season_id"], name: "index_stats_on_season_id"
   end

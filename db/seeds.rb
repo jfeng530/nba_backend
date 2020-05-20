@@ -507,4 +507,139 @@ require 'rest-client'
 # boston = Team.find_by({name: "Celtics"})
 # boston.update(logo: "http://content.sportslogos.net/logos/6/213/full/slhg02hbef3j1ov4lsnwyol5o.png")
 
+# -------------------------------------------------------------------------------------------------------
+
+# Test to create new columns and 'Game Stat Array' for optimizing simulation alogrithm
+  # Refer to 'sd' method for creating array  
+# Push all 2009 game counting stats to its respective array in the Stat instance that is Lebron's 2009 season
+
+# lebron = Player.find_by(first_name: 'LeBron')
+# lebron_games = lebron.player_stats.select{|s| s.game.year == 2009 && s.game.postseason == false}
+# lebron_stat = Stat.find_by(player: lebron, season_id: 236)
+
+# lebron_stat.fg2a_arr = []
+# lebron_stat.fg3a_arr = []
+# lebron_stat.fta_arr = []
+# lebron_stat.oreb_arr = []
+# lebron_stat.dreb_arr = []
+# lebron_stat.ast_arr = []
+# lebron_stat.stl_arr = []
+# lebron_stat.blk_arr = []
+# lebron_stat.turnover_arr = []
+# lebron_stat.save
+
+# lebron_games.each do |s|
+#   if s.fga
+#     if s.fg3a
+#       lebron_stat.fg2a_arr << s.fga - s.fg3a
+#       lebron_stat.fg2a_arr_will_change!
+#       # lebron_stat.save
+#     else
+#       lebron_stat.fg2a_arr << s.fga
+#       lebron_stat.fg2a_arr_will_change!
+#       # lebron_stat.save
+#     end
+#   end
+#   if s.fg3a
+#     lebron_stat.fg3a_arr << s.fg3a
+#     lebron_stat.fg3a_arr_will_change!
+#     # lebron_stat.save
+#   end
+#   if s.fta
+#     lebron_stat.fta_arr << s.fta
+#     lebron_stat.fta_arr_will_change!
+#     # lebron_stat.save
+#   end
+#   if s.oreb
+#     lebron_stat.oreb_arr << s.oreb
+#     lebron_stat.oreb_arr_will_change!
+#     # lebron_stat.save
+#   end
+#   if s.dreb 
+#     lebron_stat.dreb_arr << s.dreb
+#     lebron_stat.dreb_arr_will_change!
+#     # lebron_stat.save
+#   end
+#   if s.ast
+#     lebron_stat.ast_arr << s.ast
+#     lebron_stat.ast_arr_will_change!
+#     # lebron_stat.save
+#   end
+#   if s.stl
+#     lebron_stat.stl_arr << s.stl
+#     lebron_stat.stl_arr_will_change!
+#     # lebron_stat.save
+#   end
+#   if s.blk 
+#     lebron_stat.blk_arr << s.blk
+#     lebron_stat.blk_arr_will_change!
+#     # lebron_stat.save
+#   end 
+#   if s.turnover
+#     lebron_stat.turnover_arr << s.turnover
+#     lebron_stat.turnover_arr_will_change!
+#     # lebron_stat.save
+#   end
+#   lebron_stat.save
+# end
+
+Stat.all.each do |stat|
+  puts(stat.player.first_name + " " + stat.player.last_name + " Year: " + stat.season.year)
+  games = stat.player.player_stats.select{|s| s.game.year == stat.season.year && s.game.postseason == false}
+  games.each do |s|
+    if s.fga
+      if s.fg3a
+        stat.fg2a_arr << s.fga - s.fg3a
+        stat.fg2a_arr_will_change!
+        # stat.save
+      else
+        stat.fg2a_arr << s.fga
+        stat.fg2a_arr_will_change!
+        # stat.save
+      end
+    end
+    if s.fg3a
+      stat.fg3a_arr << s.fg3a
+      stat.fg3a_arr_will_change!
+      # stat.save
+    end
+    if s.fta
+      stat.fta_arr << s.fta
+      stat.fta_arr_will_change!
+      # stat.save
+    end
+    if s.oreb
+      stat.oreb_arr << s.oreb
+      stat.oreb_arr_will_change!
+      # stat.save
+    end
+    if s.dreb 
+      stat.dreb_arr << s.dreb
+      stat.dreb_arr_will_change!
+      # stat.save
+    end
+    if s.ast
+      stat.ast_arr << s.ast
+      stat.ast_arr_will_change!
+      # stat.save
+    end
+    if s.stl
+      stat.stl_arr << s.stl
+      stat.stl_arr_will_change!
+      # stat.save
+    end
+    if s.blk 
+      stat.blk_arr << s.blk
+      stat.blk_arr_will_change!
+      # stat.save
+    end 
+    if s.turnover
+      stat.turnover_arr << s.turnover
+      stat.turnover_arr_will_change!
+      # stat.save
+    end
+    stat.save
+  end
+end
+
 puts('Seeded')

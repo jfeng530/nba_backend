@@ -19,11 +19,11 @@ class Stat < ApplicationRecord
   end
 
   def sd
-    fgm = []
+    # fgm = []
+    # fg3m = []
+    # ftm = []
     fg2a = []
-    fg3m = []
     fg3a = []
-    ftm = []
     fta = []
     oreb = []
     dreb = []
@@ -36,23 +36,22 @@ class Stat < ApplicationRecord
       # if s.fgm
       #   fgm << s.fgm
       # end
+      # if s.fg3m
+      #   fg3m << s.fg3m
+      # end
+      # if s.ftm
+      #   ftm << s.ftm
+      # end
       if s.fga
-        # byebug
         if s.fg3a
           fg2a << s.fga - s.fg3a
         else
           fg2a << s.fga
         end
       end
-      # if s.fg3m
-      #   fg3m << s.fg3m
-      # end
       if s.fg3a
         fg3a << s.fg3a
       end
-      # if s.ftm
-      #   ftm << s.ftm
-      # end
       if s.fta
         fta << s.fta
       end
